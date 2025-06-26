@@ -1,6 +1,7 @@
 /**
- * Upgraded Stats.js
- * Features: Position control, scale, custom colors, modern syntax, theme support
+ * Clean and Fixed Stats.js
+ * Supports: FPS, MS, and optionally MB (Memory)
+ * With: Position control, scale, colors, and modern syntax
  */
 
 var Stats = function (options = {}) {
@@ -10,8 +11,8 @@ var Stats = function (options = {}) {
         scale = 1,
         colors = {
             fps: { fg: '#0ff', bg: '#002' },
-            ms:  { fg: '#0f0', bg: '#020' },
-            mb:  { fg: '#f08', bg: '#201' }
+            ms: { fg: '#0f0', bg: '#020' },
+            mb: { fg: '#f08', bg: '#201' }
         }
     } = options;
 
@@ -30,12 +31,12 @@ var Stats = function (options = {}) {
         showPanel(++mode % container.children.length);
     }, false);
 
-    function getPositionCSS(position) {
-        switch (position) {
-            case 'top-right':    return 'position:fixed;top:0;right:0;';
-            case 'bottom-left':  return 'position:fixed;bottom:0;left:0;';
+    function getPositionCSS(pos) {
+        switch (pos) {
+            case 'top-right': return 'position:fixed;top:0;right:0;';
+            case 'bottom-left': return 'position:fixed;bottom:0;left:0;';
             case 'bottom-right': return 'position:fixed;bottom:0;right:0;';
-            default:             return 'position:fixed;top:0;left:0;';
+            default: return 'position:fixed;top:0;left:0;';
         }
     }
 
@@ -46,7 +47,7 @@ var Stats = function (options = {}) {
 
     function showPanel(id) {
         for (let i = 0; i < container.children.length; i++) {
-            container.children[i].style.display = i === id ? 'block' : 'none';
+            container.children[i].style.display = (i === id) ? 'block' : 'none';
         }
         mode = id;
     }
@@ -70,14 +71,14 @@ var Stats = function (options = {}) {
 
         dom: container,
 
-        addPanel: addPanel,
-        showPanel: showPanel,
+        addPanel,
+        showPanel,
 
-        begin: function () {
+        begin() {
             beginTime = performance.now();
         },
 
-        end: function () {
+        end() {
             frames++;
 
             const time = performance.now();
@@ -102,11 +103,11 @@ var Stats = function (options = {}) {
             return time;
         },
 
-        update: function () {
+        update() {
             beginTime = this.end();
         },
 
-        // Backwards compatibility
+        // Backward compatibility
         domElement: container,
         setMode: showPanel
     };
@@ -151,7 +152,7 @@ Stats.Panel = function (name, fg, bg) {
     return {
         dom: canvas,
 
-        update: function (value, maxValue) {
+        update(value, maxValue) {
             min = Math.min(min, value);
             max = Math.max(max, value);
 
